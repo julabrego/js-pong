@@ -37,21 +37,27 @@ export class Game {
     this.ball = new Ball(this.canvas);
 
     this.playerOne = new Stick(this.canvas);
+    this.playerTwo = new Stick(this.canvas, false);
   }
 
   update(delta) {
     this.ball.update(delta);
     this.playerOne.update(delta);
+    this.playerTwo.update(delta);
   }
 
   handleEvents() {
     if (this.control.getActions().playerOneDown && !this.control.getActions().playerOneUp) this.playerOne.move('DOWN')
     else if (this.control.getActions().playerOneUp && !this.control.getActions().playerOneDown) this.playerOne.move('UP')
+
+    if (this.control.getActions().playerTwoDown && !this.control.getActions().playerTwoUp) this.playerTwo.move('DOWN')
+    else if (this.control.getActions().playerTwoUp && !this.control.getActions().playerTwoDown) this.playerTwo.move('UP')
   }
 
   draw() {
     this.canvas.clear();
     this.ball.draw();
     this.playerOne.draw();
+    this.playerTwo.draw();
   }
 }

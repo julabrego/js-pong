@@ -15,8 +15,8 @@ export class Stick {
     this.framesCounter = 0;
 
     this.initialPosition = {
-      x: isPlayerOne && 3,
-      y: isPlayerOne && 14
+      x: isPlayerOne ? 3 : this.canvas.getGridsQuantity().horizontal - 4,
+      y: 14
     };
 
     this.resetPosition();
