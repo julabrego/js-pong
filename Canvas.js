@@ -2,6 +2,10 @@ export class Canvas {
   htmlCanvasElement;
   context;
   size;
+  gridsQuantity = {
+    horizontal: 64,
+    vertical: 32
+  }
   gridSize;
 
   constructor() {
@@ -14,8 +18,8 @@ export class Canvas {
     }
 
     this.gridSize = {
-      width: this.size.width / 10,
-      height: this.size.height / 10,
+      width: this.size.width / this.gridsQuantity.horizontal,
+      height: this.size.height / this.gridsQuantity.vertical,
     }
 
   }
@@ -25,11 +29,19 @@ export class Canvas {
   }
 
   clear() {
-    this.context.clearRect(0, 0, this.size, this.width);
+    this.context.clearRect(0, 0, this.size.width, this.size.height);
   }
 
   getGridSize() {
     return this.gridSize;
+  }
+
+  getSize() {
+    return this.size;
+  }
+
+  getGridsQuantity() {
+    return this.gridsQuantity;
   }
 
   snapToGrid(vector2Int) {

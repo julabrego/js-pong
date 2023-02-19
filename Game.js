@@ -30,7 +30,7 @@ export class Game {
   }
 
   update(delta) {
-    //console.log(delta)
+    this.ball.update(delta)
   }
 
   draw() {
