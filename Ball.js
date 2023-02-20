@@ -7,7 +7,7 @@ export class Ball {
   position;
   initialPosition = {
     x: 20,
-    y: 16
+    y: 13
   }
 
   framesCounter;
@@ -17,6 +17,8 @@ export class Ball {
     y: 0
   }
   collisionBox;
+  isBouncing = false;
+  bouncingCounter = 0;
 
   constructor(canvas) {
     this.canvas = canvas;
@@ -32,12 +34,28 @@ export class Ball {
 
     if (this.framesCounter > 60 / Math.abs(this.speed.x)) {
       this.position.x += this.speed.x > 0 ? 1 : -1;
-      this.framesCounter = 0
+      this.framesCounter = 0;
+
+      if (this.isBouncing) {
+        this.bouncingCounter++;
+        if (this.bouncingCounter > 2) {
+          this.bouncingCounter = 0;
+          this.isBouncing = false;
+        }
+      }
     }
 
     if (this.framesCounterB > 60 / Math.abs(this.speed.y)) {
       this.position.y += this.speed.y > 0 ? 1 : -1;
-      this.framesCounterB = 0
+      this.framesCounterB = 0;
+
+      if (this.isBouncing) {
+        this.bouncingCounter++;
+        if (this.bouncingCounter > 2) {
+          this.bouncingCounter = 0;
+          this.isBouncing = false;
+        }
+      }
     }
 
     if (this.position.x <= 0 || this.position.x >= this.canvas.getGridsQuantity().horizontal - 1) this.speed.x *= -1;
@@ -52,8 +70,10 @@ export class Ball {
   }
 
   bounce() {
-    //console.log('bouncing')
-    this.speed.x *= -1;
+    if (!this.isBouncing) {
+      this.speed.x *= -1;
+      this.isBouncing = true;
+    }
   }
 
   resetPosition() {

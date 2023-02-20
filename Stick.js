@@ -44,13 +44,13 @@ export class Stick {
 
   isColliding(elementsCollisionBox) {
     if (
-      this.collisionBox.leftTop.y <= elementsCollisionBox.leftTop.y
-      &&
-      this.collisionBox.leftBottom.y >= elementsCollisionBox.leftBottom.y
-      &&
       this.collisionBox.rightTop.x >= elementsCollisionBox.leftTop.x
       &&
       this.collisionBox.leftTop.x <= elementsCollisionBox.rightTop.x
+      &&
+      this.collisionBox.leftBottom.y > elementsCollisionBox.leftTop.y
+      &&
+      this.collisionBox.leftTop.y < elementsCollisionBox.leftBottom.y
     ) {
       return true
     }
