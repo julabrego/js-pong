@@ -44,6 +44,13 @@ export class Game {
     this.ball.update(delta);
     this.playerOne.update(delta);
     this.playerTwo.update(delta);
+
+    this.handleCollisions();
+  }
+
+  handleCollisions() {
+    if (this.playerOne.isColliding(this.ball.getCollisionBox())) this.ball.bounce();
+    if (this.playerTwo.isColliding(this.ball.getCollisionBox())) this.ball.bounce();
   }
 
   handleEvents() {

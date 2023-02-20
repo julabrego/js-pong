@@ -9,6 +9,7 @@ export class Stick {
 
   framesCounter;
   speed = 30;
+  collisionBox;
 
   constructor(canvas, isPlayerOne = true) {
     this.canvas = canvas;
@@ -41,10 +42,32 @@ export class Stick {
     }
   }
 
+  isColliding(elementsCollisionBox) {
+    if (
+      this.collisionBox.leftTop.y <= elementsCollisionBox.leftTop.y
+      &&
+      this.collisionBox.leftBottom.y >= elementsCollisionBox.leftBottom.y
+      &&
+      this.collisionBox.rightTop.x >= elementsCollisionBox.leftTop.x
+      &&
+      this.collisionBox.leftTop.x <= elementsCollisionBox.rightTop.x
+    ) {
+      return true
+    }
+    return false
+  }
+
   update(delta) {
     this.framesCounter++;
     if (this.position.y < 0) this.position.y = 0;
     if (this.position.y > this.canvas.getGridsQuantity().vertical - this.size.y) this.position.y = this.canvas.getGridsQuantity().vertical - this.size.y;
+
+    this.collisionBox = {
+      leftTop: { x: this.position.x, y: this.position.y },
+      rightTop: { x: this.position.x + this.size.x, y: this.position.y },
+      rightBottom: { x: this.position.x + this.size.x, y: this.position.y + this.size.y },
+      leftBottom: { x: this.position.x, y: this.position.y + this.size.y }
+    }
   }
 
   resetPosition() {
@@ -54,4 +77,6 @@ export class Stick {
   draw() {
     this.canvas.drawRectangle('#FFF', this.position, this.size)
   }
+
+
 }

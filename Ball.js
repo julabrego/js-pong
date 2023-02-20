@@ -6,16 +6,17 @@ export class Ball {
   };
   position;
   initialPosition = {
-    x: 3,
-    y: 1
+    x: 20,
+    y: 16
   }
 
   framesCounter;
   framesCounterB;
   speed = {
-    x: 15,
-    y: 15
+    x: -15,
+    y: 0
   }
+  collisionBox;
 
   constructor(canvas) {
     this.canvas = canvas;
@@ -41,10 +42,34 @@ export class Ball {
 
     if (this.position.x <= 0 || this.position.x >= this.canvas.getGridsQuantity().horizontal - 1) this.speed.x *= -1;
     if (this.position.y <= 0 || this.position.y >= this.canvas.getGridsQuantity().vertical - 1) this.speed.y *= -1;
+
+    this.collisionBox = {
+      leftTop: { x: this.position.x, y: this.position.y },
+      rightTop: { x: this.position.x + this.size.x, y: this.position.y },
+      rightBottom: { x: this.position.x + this.size.x, y: this.position.y + this.size.y },
+      leftBottom: { x: this.position.x, y: this.position.y + this.size.y }
+    }
+  }
+
+  bounce() {
+    //console.log('bouncing')
+    this.speed.x *= -1;
   }
 
   resetPosition() {
     this.position = this.initialPosition;
+  }
+
+  getPosition() {
+    return this.position;
+  }
+
+  getSize() {
+    return this.size;
+  }
+
+  getCollisionBox() {
+    return this.collisionBox;
   }
 
   draw() {
