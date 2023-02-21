@@ -2,6 +2,7 @@ import { Canvas } from './Canvas.js';
 import { Ball } from './Ball.js';
 import { Stick } from './Stick.js';
 import { Control } from './Control.js';
+import { Hud } from './Hud.js';
 
 export class Game {
   canvas;
@@ -10,11 +11,19 @@ export class Game {
   playerTwo;
   control;
 
+  playerOneScore = 0;
+  playerTwoScore = 0;
+
   constructor() {
     this.loop = this.loop.bind(this);
     this.canvas = new Canvas();
 
     this.control = new Control();
+
+    this.goalsPlayerOne = new Hud(this.canvas);
+    this.goalsPlayerOne.setPosition(this.canvas.snapToGrid({ x: 24, y: 4 }));
+    this.goalsPlayerTwo = new Hud(this.canvas);
+    this.goalsPlayerTwo.setPosition(this.canvas.snapToGrid({ x: 40, y: 4 }));
 
     this.startGame();
 
@@ -38,6 +47,8 @@ export class Game {
 
     this.playerOne = new Stick(this.canvas);
     this.playerTwo = new Stick(this.canvas, false);
+
+    this.playerOneScore = this.playerTwoScore = 0;
   }
 
   update(delta) {
@@ -66,5 +77,7 @@ export class Game {
     this.ball.draw();
     this.playerOne.draw();
     this.playerTwo.draw();
+    this.goalsPlayerOne.draw();
+    this.goalsPlayerTwo.draw();
   }
 }

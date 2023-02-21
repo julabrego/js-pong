@@ -8,6 +8,9 @@ export class Canvas {
   }
   gridSize;
 
+  goalsPlayerOne;
+  goalsPlayerTwo;
+
   constructor() {
     this.htmlCanvasElement = document.getElementById('canvas');
     this.context = this.htmlCanvasElement.getContext('2d');
