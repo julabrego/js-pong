@@ -71,7 +71,7 @@ export class Stick {
   }
 
   resetPosition() {
-    this.position = this.initialPosition;
+    this.position = { x: this.initialPosition.x, y: this.initialPosition.y };
   }
 
   draw() {

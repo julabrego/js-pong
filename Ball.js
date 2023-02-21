@@ -18,6 +18,7 @@ export class Ball {
   }
   collisionBox;
   isBouncing = false;
+  isBoundingBounceEnabled = false;
   bouncingCounter = 0;
 
   constructor(canvas) {
@@ -58,7 +59,9 @@ export class Ball {
       }
     }
 
-    if (this.position.x <= 0 || this.position.x >= this.canvas.getGridsQuantity().horizontal - 1) this.speed.x *= -1;
+    if (this.isBoundingBounceEnabled) {
+      if (this.position.x <= 0 || this.position.x >= this.canvas.getGridsQuantity().horizontal - 1) this.speed.x *= -1;
+    }
     if (this.position.y <= 0 || this.position.y >= this.canvas.getGridsQuantity().vertical - 1) this.speed.y *= -1;
 
     this.collisionBox = {
@@ -77,7 +80,7 @@ export class Ball {
   }
 
   resetPosition() {
-    this.position = this.initialPosition;
+    this.position = { x: this.initialPosition.x, y: this.initialPosition.y };
   }
 
   getPosition() {
@@ -90,6 +93,14 @@ export class Ball {
 
   getCollisionBox() {
     return this.collisionBox;
+  }
+
+  isPlayerTwoGoal() {
+    return this.position.x < 0;
+  }
+
+  isPlayerOneGoal() {
+    return this.position.x > this.canvas.getGridsQuantity().horizontal;
   }
 
   draw() {

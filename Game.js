@@ -57,11 +57,28 @@ export class Game {
     this.playerTwo.update(delta);
 
     this.handleCollisions();
+
+    this.handleGoals();
   }
 
   handleCollisions() {
     if (this.playerOne.isColliding(this.ball.getCollisionBox())) this.ball.bounce();
     if (this.playerTwo.isColliding(this.ball.getCollisionBox())) this.ball.bounce();
+  }
+
+  handleGoals() {
+    if (this.ball.isPlayerOneGoal()) {
+      this.ball.resetPosition();
+      this.playerOneScore++;
+    }
+
+    if (this.ball.isPlayerTwoGoal()) {
+      this.ball.resetPosition();
+      this.playerTwoScore++;
+    }
+
+    this.goalsPlayerOne.setValue(this.playerOneScore);
+    this.goalsPlayerTwo.setValue(this.playerTwoScore);
   }
 
   handleEvents() {

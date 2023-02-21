@@ -22,6 +22,10 @@ export class Hud {
     this.value = value;
   }
 
+  getValue() {
+    return this.value;
+  }
+
   draw() {
     this.canvas.getContext().font = this.font;
     this.canvas.getContext().fillStyle = '#FFF';
