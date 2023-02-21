@@ -13,6 +13,11 @@ export class Game {
 
   playerOneScore = 0;
   playerTwoScore = 0;
+  enterToPlay;
+
+  timer = 0;
+  waiting = false;
+  playing = false;
 
   constructor() {
     this.loop = this.loop.bind(this);
@@ -24,16 +29,26 @@ export class Game {
     this.goalsPlayerOne.setPosition(this.canvas.snapToGrid({ x: 24, y: 4 }));
     this.goalsPlayerTwo = new Hud(this.canvas);
     this.goalsPlayerTwo.setPosition(this.canvas.snapToGrid({ x: 40, y: 4 }));
+    this.enterToPlay = new Hud(this.canvas);
+    this.enterToPlay.setPosition(this.canvas.snapToGrid({ x: 32, y: 30 }))
+    this.enterToPlay.setValue("Press enter to play");
+
+    this.ball = new Ball(this.canvas);
+
+    this.playerOne = new Stick(this.canvas);
+    this.playerTwo = new Stick(this.canvas, false);
 
     this.startGame();
 
     window.requestAnimationFrame(this.loop);
+
   }
 
   loop(timestamp) {
     let delta = timestamp - this.lastRender;
 
-    this.handleEvents();
+    if (!this.waiting)
+      this.handleEvents();
     this.update(delta);
     this.draw();
 
@@ -43,22 +58,21 @@ export class Game {
   }
 
   startGame() {
-    this.ball = new Ball(this.canvas);
-
-    this.playerOne = new Stick(this.canvas);
-    this.playerTwo = new Stick(this.canvas, false);
-
     this.playerOneScore = this.playerTwoScore = 0;
   }
 
   update(delta) {
-    this.ball.update(delta);
-    this.playerOne.update(delta);
-    this.playerTwo.update(delta);
+    if (this.playing) {
+      if (!this.isWaiting()) {
+        this.ball.update(delta);
+        this.playerOne.update(delta);
+        this.playerTwo.update(delta);
+        this.handleCollisions();
 
-    this.handleCollisions();
+        this.handleGoals();
+      }
+    }
 
-    this.handleGoals();
   }
 
   handleCollisions() {
@@ -69,12 +83,16 @@ export class Game {
   handleGoals() {
     if (this.ball.isPlayerOneGoal()) {
       this.ball.resetPosition();
+      this.ball.bounce();
       this.playerOneScore++;
+      this.wait();
     }
 
     if (this.ball.isPlayerTwoGoal()) {
+      this.ball.bounce();
       this.ball.resetPosition();
       this.playerTwoScore++;
+      this.wait();
     }
 
     this.goalsPlayerOne.setValue(this.playerOneScore);
@@ -87,6 +105,8 @@ export class Game {
 
     if (this.control.getActions().playerTwoDown && !this.control.getActions().playerTwoUp) this.playerTwo.move('DOWN')
     else if (this.control.getActions().playerTwoUp && !this.control.getActions().playerTwoDown) this.playerTwo.move('UP')
+
+    if (this.control.getActions().enter && !this.playing) this.playing = true;
   }
 
   draw() {
@@ -96,5 +116,25 @@ export class Game {
     this.playerTwo.draw();
     this.goalsPlayerOne.draw();
     this.goalsPlayerTwo.draw();
+
+    if (!this.playing) this.enterToPlay.draw();
+  }
+
+  wait() {
+    this.timer = 0;
+    this.waiting = true;
+  }
+
+  isWaiting() {
+    if (this.waiting) {
+      if (this.timer < 60) {
+        this.timer++;
+        return true;
+      } else {
+        this.timer = 0;
+        this.waiting = false;
+      }
+    }
+    return false;
   }
 }

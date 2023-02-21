@@ -26,6 +26,12 @@ export class Ball {
     this.framesCounter = 0;
     this.framesCounterB = 0;
 
+    this.initialPosition = {
+      x: this.canvas.getGridsQuantity().horizontal / 2,
+      y: this.canvas.getGridsQuantity().vertical / 2,
+    }
+    console.log(this.initialPosition)
+
     this.resetPosition();
   }
 
